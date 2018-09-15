@@ -36,6 +36,8 @@ export default class GameController {
       @Param('id') id: number,
       @Body() update: Partial<Game>
     ) {
+      if(update.id) throw new BadRequestError('You cant change the id of a game')
+      
       if(update.color) {
         if(!data.colors.includes(update.color)) throw new BadRequestError(`that is not a valid color, use one of these ${data.colors}`)
       }
@@ -44,6 +46,10 @@ export default class GameController {
       if(!game) throw new NotFoundError('Game not found djais')
 
       if(update.board) {
+        if(!Array.isArray(update.board)) throw new BadRequestError(`please input board correctly, like this ${game.board[0]} - ${game.board[1]} - ${game.board[2]}`)
+        if(!Array.isArray(update.board[0]) || 
+            !Array.isArray(update.board[1]) || 
+            !Array.isArray(update.board[2])) throw new BadRequestError(`please input board correctly, like this ${game.board[0]} - ${game.board[1]} - ${game.board[2]}`)
         if(moves(update.board, game.board) > 1) throw new BadRequestError(`you can only make 1 move per reuqest, current board is ${game.board[0]} - ${game.board[1]} - ${game.board[2]}`)
       }
 
