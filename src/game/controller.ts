@@ -39,6 +39,23 @@ export default class GameController {
       @Param('id') id: number,
       @Body() update: Partial<Game>
     ) {
+      console.log("id")
+      console.log(id)
+      console.log("update")
+      console.log(update)
+      console.log("color inputted")
+      console.log(update.color)
+      const colors = [
+        'red', 
+        'blue', 
+        'green', 
+        'yellow', 
+        'magenta'
+      ]
+      if(update.color) {
+        if(!colors.includes(update.color)) throw new BadRequestError(`that is not a valid color, use one of these ${colors}`)
+      }
+
       const game = await Game.findOne(id)
       if(!game) throw new NotFoundError('Game not found djais')
 
