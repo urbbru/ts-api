@@ -1,4 +1,4 @@
-import {JsonController, Get, Post, Put, Body, Param, HttpCode, NotFoundError} from 'routing-controllers'
+import {JsonController, Get, Post, Put, Body, Param, HttpCode, NotFoundError, BadRequestError} from 'routing-controllers'
 import Game from './entity';
 
 @JsonController()
@@ -15,6 +15,8 @@ export default class GameController {
     createGame(
       @Body() game: Game
     ) {
+      if(Object.keys(game).length > 1) throw new BadRequestError('you can only specify 1 value, which is ->name<-')
+      if(!game.hasOwnProperty('name')) throw new BadRequestError('you can only specify ->name<-')
       const colors = [
         'red', 
         'blue', 
@@ -39,7 +41,7 @@ export default class GameController {
     ) {
       const game = await Game.findOne(id)
       if(!game) throw new NotFoundError('Game not found djais')
-      
+
       return Game.merge(game, update).save()
     }
 
