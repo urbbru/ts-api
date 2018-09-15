@@ -1,0 +1,14 @@
+{
+    "defaultBoard": [
+        ["o", "o", "o"],
+        ["o", "o", "o"],
+        ["o", "o", "o"]
+    ],
+    "colors": [
+        "red", 
+        "blue",
+        "green",
+        "yellow",
+        "magenta"
+    ]
+}

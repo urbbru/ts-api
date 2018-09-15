@@ -1,5 +1,6 @@
 import {JsonController, Get, Post, Put, Body, Param, HttpCode, NotFoundError, BadRequestError} from 'routing-controllers'
 import Game from './entity';
+const data = require('./data')
 
 @JsonController()
 export default class GameController {
@@ -17,20 +18,9 @@ export default class GameController {
     ) {
       if(Object.keys(game).length > 1) throw new BadRequestError('you can only specify 1 value, which is ->name<-')
       if(!game.hasOwnProperty('name')) throw new BadRequestError('you can only specify ->name<-')
-      const colors = [
-        'red', 
-        'blue', 
-        'green', 
-        'yellow', 
-        'magenta'
-      ]
-      const randieColor = colors[Math.floor(Math.random() * colors.length)]
+      const randieColor = data.colors[Math.floor(Math.random() * data.colors.length)]
       game.color = randieColor
-      game.board = [
-        ['o', 'o', 'o'],
-        ['o', 'o', 'o'],
-        ['o', 'o', 'o']
-      ]
+      game.board = data.defaultBoard
       return game.save()
     }
 
@@ -39,21 +29,8 @@ export default class GameController {
       @Param('id') id: number,
       @Body() update: Partial<Game>
     ) {
-      console.log("id")
-      console.log(id)
-      console.log("update")
-      console.log(update)
-      console.log("color inputted")
-      console.log(update.color)
-      const colors = [
-        'red', 
-        'blue', 
-        'green', 
-        'yellow', 
-        'magenta'
-      ]
       if(update.color) {
-        if(!colors.includes(update.color)) throw new BadRequestError(`that is not a valid color, use one of these ${colors}`)
+        if(!data.colors.includes(update.color)) throw new BadRequestError(`that is not a valid color, use one of these ${data.colors}`)
       }
 
       const game = await Game.findOne(id)
