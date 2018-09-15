@@ -12,7 +12,7 @@ export default class Game extends BaseEntity {
     @Column("text", {nullable:false})
     name:string;
 
-    @Column("text")
+    @Column("text", {nullable:false})
     color:string;
 
     @Column("json", {
