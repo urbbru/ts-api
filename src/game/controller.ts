@@ -1,11 +1,7 @@
 import {JsonController, Get, Post, Put, Body, Param, HttpCode, NotFoundError, BadRequestError} from 'routing-controllers'
 import Game from './entity';
-const data = require('./data')
 
-const moves = (board1, board2) => board1
-                        .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
-                        .reduce((a, b) => a.concat(b))
-                        .length
+import { moves, colors, defaultBoard } from './data'
 
 @JsonController()
 export default class GameController {
@@ -23,11 +19,8 @@ export default class GameController {
     ) {
       if(Object.keys(game).length > 1) throw new BadRequestError('you can only specify 1 value, which is ->name<-')
       if(!game.hasOwnProperty('name')) throw new BadRequestError('you can only specify ->name<-')
-
-      const randieColor = data.colors[Math.floor(Math.random() * data.colors.length)]
-
-      game.color = randieColor
-
+      game.color = colors[Math.floor(Math.random() * colors.length)]
+      game.board = defaultBoard
       return game.save()
     }
 
@@ -39,7 +32,7 @@ export default class GameController {
       if(update.id) throw new BadRequestError('You cant change the id of a game')
       
       if(update.color) {
-        if(!data.colors.includes(update.color)) throw new BadRequestError(`that is not a valid color, use one of these ${data.colors}`)
+        if(!colors.includes(update.color)) throw new BadRequestError(`that is not a valid color, use one of these ${colors}`)
       }
 
       const game = await Game.findOne(id)

@@ -1,7 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
 import { IsString } from 'class-validator';
-const data = require('./data')
 
 @Entity()
 export default class Game extends BaseEntity {
@@ -16,9 +15,7 @@ export default class Game extends BaseEntity {
     color:string;
 
     @Column("json", {
-        array: true,
-        default: data.defaultBoard,
         nullable: false
     })
-    board:string[][];
+    board: string[][]; 
 }
